@@ -6,8 +6,8 @@ using ImageMagick # alternatively: QuartsImageIO
 
 const ffmpeg = "ffmpeg" # name of executable
 
-struct ffmpegIO{T}
-    io::Stream{T}
+struct ffmpegIO
+    io::IO
 end
 Base.close(p::ffmpegIO) = close(p.io)
 Base.eof(p::ffmpegIO) = eof(p.io)
@@ -23,16 +23,16 @@ openvideo(filename::String, mode::Union{Char,String}) = openvideo(filename, Symb
 `openvideo(file, :r)` opens movie file for reading
 """
 function openvideo(filename::String, ::Val{:r})
-    cmd = `$ffmpeg -i $filename -f image2pipe -vcodec png -`
-    ffmpegIO(Stream(format"PNG", open(cmd)[1]))
+    cmd = `$ffmpeg -nostats -i $filename -f image2pipe -vcodec png -`
+    ffmpegIO(open(cmd)[1])
 end
 
 """
 `openvideo(file, :w)` opens movie file for writing
 """
-function  openvideo(filename::String, ::Val{:w})
-    cmd = `$ffmpeg -f image2pipe -vcodec png -i - -vcodec h264 $filename`
-    ffmpegIO(Stream(format"PNG", open(cmd, "w")[1]))
+function openvideo(filename::String, ::Val{:w})
+    cmd = `$ffmpeg -nostats -f image2pipe -vcodec png -r 24 -i - -vcodec h264 -q 20 $filename`
+    ffmpegIO(open(cmd, "w")[1])
 end
 
 function openvideo(f::Function, filename::String, mode)
@@ -48,7 +48,7 @@ end
 # while parsing for the "IEND" chunk.
 # (Since ffmpeg sends a stream of concatenated images,
 # we can't just read until eof.)
-function read(io::Stream{format"PNG"})
+function readpngdata(io)
     const blk = 65536;
     a = Array{UInt8}(blk)
     readbytes!(io, a, 8)
@@ -73,7 +73,7 @@ function read(io::Stream{format"PNG"})
         if length(a)<n+m
             resize!(a, max(length(a)+blk, n+m+12))
         end
-        readbytes!(io, view(a, n+1:n+m+12), m)
+        readbytes!(io, view(a, n+1:n+m), m)
         n = n+m
     end
     resize!(a,n)
@@ -82,12 +82,13 @@ end
 
 "Read a frame from a video"
 function read(stream::ffmpegIO)
-    ImageMagick.load_(read(stream.io))
+    ImageMagick.load_(readpngdata(stream.io))
 end
 
 "Write a frame to a video"
 function write(stream::ffmpegIO, img)
-    write(stream.io, img)
+    #show(stream.io, "image/png", img) # rescales unless io[:full_fidelity] = true
+    save(Stream(format"PNG", stream.io), img)
 end
 
 end # module
