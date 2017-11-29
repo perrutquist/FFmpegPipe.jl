@@ -6,25 +6,19 @@ using ImageMagick # alternatively: QuartsImageIO
 
 const ffmpeg = "ffmpeg" # name of executable
 
-struct ffmpegIO
-    io::IO
-end
-Base.close(p::ffmpegIO) = close(p.io)
-Base.eof(p::ffmpegIO) = eof(p.io)
-
 """
 Open a movie file using ffmpeg's image2pipe interface.
 """
-openvideo(filename::String) = openvideo(filename, Val{:r}())
-openvideo(filename::String, mode::Symbol) = openvideo(filename, Val{mode}())
-openvideo(filename::String, mode::Union{Char,String}) = openvideo(filename, Symbol(mode))
+openvideo(filename::String; kwargs...) = openvideo(filename, Val{:r}(); kwargs...)
+openvideo(filename::String, mode::Symbol; kwargs...) = openvideo(filename, Val{mode}(); kwargs...)
+openvideo(filename::String, mode::Union{Char,String}; kwargs...) = openvideo(filename, Symbol(mode); kwargs...)
 
 """
 `openvideo(file, :r)` opens movie file for reading
 """
 function openvideo(filename::String, ::Val{:r}; loglevel="fatal")
     cmd = `$ffmpeg -loglevel $loglevel -nostats -i $filename -f image2pipe -vcodec png -compression_level 0 -`
-    ffmpegIO(open(cmd)[1])
+    open(cmd)[1]
 end
 
 """
@@ -32,7 +26,7 @@ end
 """
 function openvideo(filename::String, ::Val{:w}; r=24, q=3, vcodec="h264", loglevel="fatal")
     cmd = `$ffmpeg -loglevel $loglevel -nostats -f image2pipe -vcodec png -r $r -i - -vcodec $vcodec -q $q $filename`
-    io = ffmpegIO(open(cmd, "w")[1])
+    open(cmd, "w")[1]
 end
 
 function openvideo(f::Function, filename::String, mode)
@@ -81,15 +75,11 @@ function readpngdata(io)
 end
 
 "Read a frame from a video"
-read(stream::ffmpegIO) = ImageMagick.load_(readpngdata(stream.io))
+readframe(io::IO) = ImageMagick.load_(readpngdata(io))
 
 "Write a frame to a video"
-@generated function write(stream::ffmpegIO, img)
-    if method_exists(save, (Stream{format"PNG"}, img))
-        :( save(Stream(format"PNG", stream.io), img) )
-    else
-        :( show(stream.io, MIME("image/png"), img) )
-    end
-end
+writeframe(io::IO, img) = show(io, MIME("image/png"), img)
+# Bypass re-scaling:
+writeframe(io::IO, img::Array{T,2}) where T<:Colorant = save(Stream(format"PNG", io), img)
 
 end # module
