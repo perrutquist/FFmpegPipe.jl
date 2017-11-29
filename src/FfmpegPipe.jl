@@ -4,6 +4,8 @@ using Images
 using FileIO
 using ImageMagick # alternatively: QuartsImageIO
 
+export openvideo, readframe, writeframe
+
 const ffmpeg = "ffmpeg" # name of executable
 
 """
@@ -80,6 +82,6 @@ readframe(io::IO) = ImageMagick.load_(readpngdata(io))
 "Write a frame to a video"
 writeframe(io::IO, img) = show(io, MIME("image/png"), img)
 # Bypass re-scaling:
-writeframe(io::IO, img::Array{T,2}) where T<:Colorant = save(Stream(format"PNG", io), img)
+writeframe(io::IO, img::Array{T,2} where T<:Colorant) = save(Stream(format"PNG", io), img)
 
 end # module

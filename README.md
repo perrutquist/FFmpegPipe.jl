@@ -28,12 +28,12 @@ Ffmpeg must already be installed, or this will not work.
 ```julia
 using FfmpegPipe
 using Plots
-s = FfmpegPipe.openvideo("sinecurve.mp4", "w", r=24)
+s = openvideo("sinecurve.mp4", "w", r=24)
 pyplot()
 for a in linspace(0, pi, 3*24)
     x = a+linspace(0, pi, 1000)
     plt = plot(x, sin.(x))
-    FfmpegPipe.writeframe(s, plt)
+    writeframe(s, plt)
 end
 close(s)
 ```
@@ -44,11 +44,11 @@ frames to another movie. However, all information except the images themselves
 will need to be transfered to the new movie in some other way.
 
 ```julia
-s1 = FfmpegPipe.openvideo("sinecurve.mp4", "r")
-s2 = FfmpegPipe.openvideo("upsidecurve.mp4", "w")
+s1 = openvideo("sinecurve.mp4", "r")
+s2 = openvideo("upsidecurve.mp4", "w", r=24)
 while !eof(s1)
-    img = FfmpegPipe.readframe(s1)
-    FfmpegPipe.writeframe(s2, img[end:-1:1,:])
+    img = readframe(s1)
+    writeframe(s2, img[end:-1:1,:])
 end
 close(s2)
 close(s1)
