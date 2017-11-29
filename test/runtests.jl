@@ -1,4 +1,4 @@
-using FfmpegPipe
+using FFmpegPipe
 using Base.Test
 using Plots
 

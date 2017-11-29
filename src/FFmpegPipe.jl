@@ -1,4 +1,4 @@
-module FfmpegPipe
+module FFmpegPipe
 
 using Images
 using FileIO
@@ -42,7 +42,7 @@ end
 
 # Read up to the end of a .png image, one chunk at a time,
 # while parsing for the "IEND" chunk.
-# (Since ffmpeg sends a stream of concatenated images,
+# (Since FFmpeg sends a stream of concatenated images,
 # we can't just read until eof.)
 function readpngdata(io)
     const blk = 65536;

@@ -1,32 +1,33 @@
-# FfmpegPipe.jl - Save videos from Julia
+# FFmpegPipe.jl - Save videos from Julia
 
-[![Build Status](https://travis-ci.org/perrutquist/FfmpegPipe.jl.svg?branch=master)](https://travis-ci.org/perrutquist/FfmpegPipe.jl)
+[![Build Status](https://travis-ci.org/perrutquist/FFmpegPipe.jl.svg?branch=master)](https://travis-ci.org/perrutquist/FFmpegPipe.jl)
 
-[![Coverage Status](https://coveralls.io/repos/perrutquist/FfmpegPipe.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/perrutquist/FfmpegPipe.jl?branch=master)
+[![Coverage Status](https://coveralls.io/repos/perrutquist/FFmpegPipe.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/perrutquist/FFmpegPipe.jl?branch=master)
 
-[![codecov.io](http://codecov.io/github/perrutquist/FfmpegPipe.jl/coverage.svg?branch=master)](http://codecov.io/github/perrutquist/FfmpegPipe.jl?branch=master)
+[![codecov.io](http://codecov.io/github/perrutquist/FFmpegPipe.jl/coverage.svg?branch=master)](http://codecov.io/github/perrutquist/FFmpegPipe.jl?branch=master)
 
-FfmpegPipe lets you read/write video files (`mp4`, `wmv`, `avi`, `mov`...) from Julia by piping images from/to an `ffmpeg` process.
+FFmpegPipe lets you read/write video files (mp4, wmv, avi, mov...) from Julia by piping images from/to an ffmpeg process. This is just a simple wrapper.
+The author of this package is not affiliated with the authors of FFmpeg in any way.)
 
-This is neither as efficient nor as versatile as calling lower-level routines from libav/ffmpeg directly, like [VideoIO.jl](https://github.com/kmsquire/VideoIO.jl) does, but that package does not yet support video output.
+This is neither as efficient nor as versatile as calling lower-level routines from libav/FFmpeg directly, like [VideoIO.jl](https://github.com/kmsquire/VideoIO.jl) does, but that package does not yet support video output.
 
-Anything that Julia can `show` as an `image/png` can be sent as a video frame,
+Anything that Julia can `show` as a `MIME("image/png")` can be sent as a video frame,
 in particular `Plot` objects from [Plots.jl](https://github.com/JuliaPlots/Plots.jl)
 and `Array{T,2} where T<:Colorant` from [Images.jl](https://github.com/JuliaImages/Images.jl)
 have been tested to work.
 
 (Yes, it is unnecessary to compress/decompress a PNG image only to pass it form
-one process to another, but at least the process is lossless.)
+one process to another, but at least it is lossless.)
 
 ## Examples
 
 We can create a movie by generating lots of plots and writing each one to
 the movie as a frame.
 
-Plots and ffmpeg must already be installed, or this will not work.
+Plots and FFmpeg must already be installed, or this will not work.
 
 ```julia
-using FfmpegPipe
+using FFmpegPipe
 using Plots
 s = openvideo("sinecurve.mp4", "w", r=24)
 pyplot()
