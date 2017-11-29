@@ -31,8 +31,8 @@ function openvideo(filename::String, ::Val{:w}; r=24, q=3, vcodec="h264", loglev
     open(cmd, "w")[1]
 end
 
-function openvideo(f::Function, filename::String, mode)
-    io = openvideo(filename, mode)
+function openvideo(f::Function, filename::String, mode; kwargs...)
+    io = openvideo(filename, mode; kwargs...)
     try
         f(io)
     finally
