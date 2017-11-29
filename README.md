@@ -23,7 +23,7 @@ one process to another, but at least the process is lossless.)
 We can create a movie by generating lots of plots and writing each one to
 the movie as a frame.
 
-Ffmpeg must already be installed, or this will not work.
+Plots and ffmpeg must already be installed, or this will not work.
 
 ```julia
 using FfmpegPipe
