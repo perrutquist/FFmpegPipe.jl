@@ -22,17 +22,17 @@ openvideo(filename::String, mode::Union{Char,String}) = openvideo(filename, Symb
 """
 `openvideo(file, :r)` opens movie file for reading
 """
-function openvideo(filename::String, ::Val{:r})
-    cmd = `$ffmpeg -nostats -i $filename -f image2pipe -vcodec png -`
+function openvideo(filename::String, ::Val{:r}; loglevel="fatal")
+    cmd = `$ffmpeg -loglevel $loglevel -nostats -i $filename -f image2pipe -vcodec png -compression_level 0 -`
     ffmpegIO(open(cmd)[1])
 end
 
 """
 `openvideo(file, :w)` opens movie file for writing
 """
-function openvideo(filename::String, ::Val{:w})
-    cmd = `$ffmpeg -nostats -f image2pipe -vcodec png -r 24 -i - -vcodec h264 -q 20 $filename`
-    ffmpegIO(open(cmd, "w")[1])
+function openvideo(filename::String, ::Val{:w}; r=24, q=3, vcodec="h264", loglevel="fatal")
+    cmd = `$ffmpeg -loglevel $loglevel -nostats -f image2pipe -vcodec png -r $r -i - -vcodec $vcodec -q $q $filename`
+    io = ffmpegIO(open(cmd, "w")[1])
 end
 
 function openvideo(f::Function, filename::String, mode)
@@ -81,14 +81,15 @@ function readpngdata(io)
 end
 
 "Read a frame from a video"
-function read(stream::ffmpegIO)
-    ImageMagick.load_(readpngdata(stream.io))
-end
+read(stream::ffmpegIO) = ImageMagick.load_(readpngdata(stream.io))
 
 "Write a frame to a video"
-function write(stream::ffmpegIO, img)
-    #show(stream.io, "image/png", img) # rescales unless io[:full_fidelity] = true
-    save(Stream(format"PNG", stream.io), img)
+@generated function write(stream::ffmpegIO, img)
+    if method_exists(save, (Stream{format"PNG"}, img))
+        :( save(Stream(format"PNG", stream.io), img) )
+    else
+        :( show(stream.io, MIME("image/png"), img) )
+    end
 end
 
 end # module
