@@ -6,8 +6,7 @@
 
 [![codecov.io](http://codecov.io/github/perrutquist/FFmpegPipe.jl/coverage.svg?branch=master)](http://codecov.io/github/perrutquist/FFmpegPipe.jl?branch=master)
 
-FFmpegPipe lets you read/write video files (mp4, wmv, avi, mov...) from Julia by piping images from/to an ffmpeg process. This is just a simple wrapper.
-The author of this package is not affiliated with the authors of FFmpeg in any way.)
+FFmpegPipe lets you read/write video files (mp4, wmv, avi, mov...) from Julia by piping images from/to an ffmpeg process.
 
 This is neither as efficient nor as versatile as calling lower-level routines from libav/FFmpeg directly, like [VideoIO.jl](https://github.com/kmsquire/VideoIO.jl) does, but that package does not yet support video output.
 
@@ -15,9 +14,11 @@ Anything that Julia can `show` as a `MIME("image/png")` can be sent as a video f
 in particular `Plot` objects from [Plots.jl](https://github.com/JuliaPlots/Plots.jl)
 and `Array{T,2} where T<:Colorant` from [Images.jl](https://github.com/JuliaImages/Images.jl)
 have been tested to work.
-
 (Yes, it is unnecessary to compress/decompress a PNG image only to pass it form
 one process to another, but at least it is lossless.)
+
+This is just a simple wrapper.
+The author of this package is not affiliated with the authors of FFmpeg in any way.
 
 ## Examples
 
