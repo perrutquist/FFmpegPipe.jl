@@ -18,8 +18,11 @@ openvideo(filename::String, mode::Union{Char,String}; kwargs...) = openvideo(fil
 """
 `openvideo(file, :r)` opens movie file for reading
 """
-function openvideo(filename::String, ::Val{:r}; loglevel="fatal")
-    cmd = `$ffmpeg -loglevel $loglevel -nostats -i $filename -f image2pipe -vcodec png -compression_level 0 -`
+function openvideo(filename::String, ::Val{:r}; loglevel="fatal", ss=0, t=missing, r=missing, s=missing)
+    t = ismissing(t) ? "" : t
+    r = ismissing(r) ? "" : r
+    s = ismissing(s) ? "" : s
+    cmd = `$ffmpeg -loglevel $loglevel -nostats -ss $ss -i $filename $t $r $s -f image2pipe -vcodec png -compression_level 0 -`
     open(cmd)
 end
 
