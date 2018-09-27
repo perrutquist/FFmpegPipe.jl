@@ -1,13 +1,13 @@
 using FFmpegPipe
-using Base.Test
+using Test
 using Plots
 
 f1 = tempname()*".mp4"
 
 s = openvideo(f1, "w", r=24)
 pyplot()
-for a in linspace(0, pi, 24)
-    x = a+linspace(0, pi, 100)
+for a in range(0, stop=pi, length=24)
+    x = a .+ range(0, stop=pi, length=100)
     plt = plot(x, sin.(x))
     writeframe(s, plt)
 end
