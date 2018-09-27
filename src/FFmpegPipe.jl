@@ -20,7 +20,7 @@ openvideo(filename::String, mode::Union{Char,String}; kwargs...) = openvideo(fil
 """
 function openvideo(filename::String, ::Val{:r}; loglevel="fatal")
     cmd = `$ffmpeg -loglevel $loglevel -nostats -i $filename -f image2pipe -vcodec png -compression_level 0 -`
-    open(cmd)[1]
+    open(cmd)
 end
 
 """
@@ -28,7 +28,7 @@ end
 """
 function openvideo(filename::String, ::Val{:w}; r=24, q=3, vcodec="h264", loglevel="fatal")
     cmd = `$ffmpeg -loglevel $loglevel -nostats -f image2pipe -vcodec png -r $r -i - -vcodec $vcodec -q $q $filename`
-    open(cmd, "w")[1]
+    open(cmd, "w")
 end
 
 function openvideo(f::Function, filename::String, mode; kwargs...)
@@ -45,8 +45,8 @@ end
 # (Since FFmpeg sends a stream of concatenated images,
 # we can't just read until eof.)
 function readpngdata(io)
-    const blk = 65536;
-    a = Array{UInt8}(blk)
+    blk = 65536;
+    a = Array{UInt8}(undef, blk)
     readbytes!(io, a, 8)
     if view(a, 1:8) != magic(format"PNG")
         error("Bad magic.")
@@ -63,7 +63,7 @@ function readpngdata(io)
         end
         chunktype = view(a, n+5:n+8)
         n=n+12
-        if chunktype == Array{UInt8}("IEND")
+        if chunktype == codeunits("IEND")
             break
         end
         if length(a)<n+m
