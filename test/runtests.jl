@@ -25,6 +25,12 @@ end
 close(s2)
 close(s1)
 
-rm(f1)
 @test isfile(f2)
 rm(f2)
+
+s1 = openvideo(f1, "r", options = (s = "100x101",))
+img = readframe(s1)
+
+@test size(img) == (101, 100)
+
+rm(f1)

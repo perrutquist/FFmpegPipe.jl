@@ -7,6 +7,7 @@ using ImageMagick # alternatively: QuartsImageIO
 export openvideo, readframe, writeframe
 
 const ffmpeg = "ffmpeg" # name of executable
+const befores = [:ss] # arguments that should come before the `-i filename` in the ffmpeg call
 
 """
 Open a movie file using ffmpeg's image2pipe interface.
@@ -18,11 +19,12 @@ openvideo(filename::String, mode::Union{Char,String}; kwargs...) = openvideo(fil
 """
 `openvideo(file, :r)` opens movie file for reading
 """
-function openvideo(filename::String, ::Val{:r}; loglevel="fatal", ss=0, t=missing, r=missing, s=missing)
-    t = ismissing(t) ? "" : t
-    r = ismissing(r) ? "" : r
-    s = ismissing(s) ? "" : s
-    cmd = `$ffmpeg -loglevel $loglevel -nostats -ss $ss -i $filename $t $r $s -f image2pipe -vcodec png -compression_level 0 -`
+function openvideo(filename::String, ::Val{:r}; loglevel="fatal", options::NamedTuple = NamedTuple())
+    before = Iterators.flatten(("-$k", v) for (k,v) in pairs(options) if k ∈ befores)
+    # before = isempty(_before) ? `` : _before
+    after = Iterators.flatten(("-$k", v) for (k,v) in pairs(options) if k ∉ befores)
+    # after = isempty(_after) ? `` : _after
+    cmd = `$ffmpeg -loglevel $loglevel -nostats $before -i $filename $after -f image2pipe -vcodec png -compression_level 0 -`
     open(cmd)
 end
 
