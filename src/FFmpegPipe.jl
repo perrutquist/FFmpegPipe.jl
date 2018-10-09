@@ -7,32 +7,54 @@ using ImageMagick # alternatively: QuartsImageIO
 export openvideo, readframe, writeframe
 
 const ffmpeg = "ffmpeg" # name of executable
-const befores = [:ss] # arguments that should come before the `-i filename` in the ffmpeg call
 
 """
 Open a movie file using ffmpeg's image2pipe interface.
 """
-openvideo(filename::String; kwargs...) = openvideo(filename, Val{:r}(); kwargs...)
+openvideo(filename::String; kwargs...) = openvideo(filename, :r; kwargs...)
 openvideo(filename::String, mode::Symbol; kwargs...) = openvideo(filename, Val{mode}(); kwargs...)
 openvideo(filename::String, mode::Union{Char,String}; kwargs...) = openvideo(filename, Symbol(mode); kwargs...)
+
+function addkwargs!(input_options, output_options, kwargs)
+    for (namein, value) in kwargs
+        m = match(r"^(.*)_(in|out)", string(namein))
+        if m ≢ nothing 
+            name, direction = m.captures
+            if direction == "in"
+                input_options[Symbol(name)] = value
+            else
+                output_options[Symbol(name)] = value
+            end
+        else
+            output_options[namein] = value
+        end
+    end
+end
 
 """
 `openvideo(file, :r)` opens movie file for reading
 """
-function openvideo(filename::String, ::Val{:r}; loglevel="fatal", options::NamedTuple = NamedTuple())
-    before = Iterators.flatten(("-$k", v) for (k,v) in pairs(options) if k ∈ befores)
-    # before = isempty(_before) ? `` : _before
-    after = Iterators.flatten(("-$k", v) for (k,v) in pairs(options) if k ∉ befores)
-    # after = isempty(_after) ? `` : _after
-    cmd = `$ffmpeg -loglevel $loglevel -nostats $before -i $filename $after -f image2pipe -vcodec png -compression_level 0 -`
+
+function openvideo(filename::String, ::Val{:r}; loglevel_out = "fatal", kwargs...)
+    input_options = Dict{Symbol, Any}()
+    output_options = Dict{Symbol, Any}(:loglevel => loglevel_out)
+    addkwargs!(input_options, output_options, kwargs)
+    before = Iterators.flatten(("-$k", v) for (k,v) in pairs(input_options))
+    after = Iterators.flatten(("-$k", v) for (k,v) in pairs(output_options))
+    cmd = `$ffmpeg -nostats $before -i $filename $after -f image2pipe -vcodec png -compression_level 0 -`
     open(cmd)
 end
 
 """
 `openvideo(file, :w)` opens movie file for writing
 """
-function openvideo(filename::String, ::Val{:w}; r=24, q=3, vcodec="h264", loglevel="fatal")
-    cmd = `$ffmpeg -loglevel $loglevel -nostats -f image2pipe -vcodec png -r $r -i - -vcodec $vcodec -q $q $filename`
+function openvideo(filename::String, ::Val{:w}; r_out=24, q_out=3, vcodec_out="h264", loglevel_out="fatal", kwargs...)
+    input_options = Dict{Symbol, Any}()
+    output_options = Dict{Symbol, Any}(:r => r_out, :q => q_out, :vcodec => vcodec_out, :loglevel => loglevel_out)
+    addkwargs!(input_options, output_options, kwargs)
+    before = Iterators.flatten(("-$k", v) for (k,v) in input_options)
+    after = Iterators.flatten(("-$k", v) for (k,v) in output_options)
+    cmd = `$ffmpeg -nostats -f image2pipe -vcodec png $before -i - $after $filename`
     open(cmd, "w")
 end
 

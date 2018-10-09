@@ -14,6 +14,7 @@ end
 close(s)
 
 @test isfile(f1)
+
 f2 = tempname()*".mp4"
 
 s1 = openvideo(f1, "r")
@@ -26,11 +27,15 @@ close(s2)
 close(s1)
 
 @test isfile(f2)
+
 rm(f2)
 
-s1 = openvideo(f1, "r", options = (s = "100x101",))
+w = 103
+h = 97
+s1 = openvideo(f1, "r", ss_in = 0.5, s_out = "$(w)x$h")
 img = readframe(s1)
-
-@test size(img) == (101, 100)
+@test size(img) == (h, w)
+close(s1)
 
 rm(f1)
+
