@@ -7,6 +7,7 @@
 ![Lifecycle](https://img.shields.io/badge/lifecycle-archived-red.svg)
 ![Lifecycle](https://img.shields.io/badge/lifecycle-dormant-blue.svg) -->
 [![Build Status](https://travis-ci.org/yakir12/FFmpegPipe.jl.svg?branch=master)](https://travis-ci.org/yakir12/FFmpegPipe.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/70gsn9q8f2w7ko68?svg=true)](https://ci.appveyor.com/project/yakir12/ffmpegpipe-jl)
 [![codecov.io](http://codecov.io/github/yakir12/FFmpegPipe.jl/coverage.svg?branch=master)](http://codecov.io/github/yakir12/FFmpegPipe.jl?branch=master)
 
 FFmpegPipe lets you read/write video files (mp4, wmv, avi, mov...) from Julia by piping images from/to an [FFmpeg](https://ffmpeg.org/) process.
