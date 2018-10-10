@@ -1,10 +1,14 @@
 # FFmpegPipe.jl - Save videos from Julia
 
-[![Build Status](https://travis-ci.org/perrutquist/FFmpegPipe.jl.svg?branch=master)](https://travis-ci.org/perrutquist/FFmpegPipe.jl)
-
-[![Coverage Status](https://coveralls.io/repos/perrutquist/FFmpegPipe.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/perrutquist/FFmpegPipe.jl?branch=master)
-
-[![codecov.io](http://codecov.io/github/perrutquist/FFmpegPipe.jl/coverage.svg?branch=master)](http://codecov.io/github/perrutquist/FFmpegPipe.jl?branch=master)
+![Lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)<!--
+![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
+![Lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)
+![Lifecycle](https://img.shields.io/badge/lifecycle-retired-orange.svg)
+![Lifecycle](https://img.shields.io/badge/lifecycle-archived-red.svg)
+![Lifecycle](https://img.shields.io/badge/lifecycle-dormant-blue.svg) -->
+[![Build Status](https://travis-ci.org/yakir12/FFmpegPipe.jl.svg?branch=master)](https://travis-ci.org/yakir12/FFmpegPipe.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/70gsn9q8f2w7ko68?svg=true)](https://ci.appveyor.com/project/yakir12/ffmpegpipe-jl)
+[![codecov.io](http://codecov.io/github/yakir12/FFmpegPipe.jl/coverage.svg?branch=master)](http://codecov.io/github/yakir12/FFmpegPipe.jl?branch=master)
 
 FFmpegPipe lets you read/write video files (mp4, wmv, avi, mov...) from Julia by piping images from/to an [FFmpeg](https://ffmpeg.org/) process.
 

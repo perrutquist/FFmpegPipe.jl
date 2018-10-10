@@ -1,0 +1,17 @@
+name = "FFmpegPipe"
+uuid = "f0ed6883-1047-5070-ab24-66f5d3b648be"
+authors = ["yakir12 <12.yakir@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+GR = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
+
+[targets]
+test = ["Test", "Plots", "GR"]

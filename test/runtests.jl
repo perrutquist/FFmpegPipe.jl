@@ -1,19 +1,20 @@
 using FFmpegPipe
-using Base.Test
+using Test
 using Plots
+gr()
 
 f1 = tempname()*".mp4"
 
 s = openvideo(f1, "w", r=24)
-pyplot()
-for a in linspace(0, pi, 24)
-    x = a+linspace(0, pi, 100)
+for a in range(0, stop=pi, length=24)
+    x = a .+ range(0, stop=pi, length=100)
     plt = plot(x, sin.(x))
     writeframe(s, plt)
 end
 close(s)
 
 @test isfile(f1)
+
 f2 = tempname()*".mp4"
 
 s1 = openvideo(f1, "r")
@@ -25,6 +26,16 @@ end
 close(s2)
 close(s1)
 
-rm(f1)
 @test isfile(f2)
+
 rm(f2)
+
+w = 103
+h = 97
+s1 = openvideo(f1, "r", ss_in = 0.5, s_out = "$(w)x$h")
+img = readframe(s1)
+@test size(img) == (h, w)
+close(s1)
+
+rm(f1)
+
