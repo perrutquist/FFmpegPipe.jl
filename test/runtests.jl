@@ -1,6 +1,7 @@
 using FFmpegPipe
 using Test
 using Plots
+gr()
 
 f1 = tempname()*".mp4"
 
