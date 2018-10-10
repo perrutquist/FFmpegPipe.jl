@@ -1,14 +1,12 @@
 # FFmpegPipe.jl - Save videos from Julia
 
-![Lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)<!--
-![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
-![Lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)
-![Lifecycle](https://img.shields.io/badge/lifecycle-retired-orange.svg)
-![Lifecycle](https://img.shields.io/badge/lifecycle-archived-red.svg)
-![Lifecycle](https://img.shields.io/badge/lifecycle-dormant-blue.svg) -->
-[![Build Status](https://travis-ci.org/yakir12/FFmpegPipe.jl.svg?branch=master)](https://travis-ci.org/yakir12/FFmpegPipe.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/70gsn9q8f2w7ko68?svg=true)](https://ci.appveyor.com/project/yakir12/ffmpegpipe-jl)
-[![codecov.io](http://codecov.io/github/yakir12/FFmpegPipe.jl/coverage.svg?branch=master)](http://codecov.io/github/yakir12/FFmpegPipe.jl?branch=master)
+# MOVED
+
+In the future, this package will be maintained at https://github.com/yakir12/FFmpegPipe.jl
+
+If your upstream repository is perrutquist/FFmpegPipe.jl then you should do `git remote set-url origin git@github.com:yakir12/FFmpegPipe.jl.git` (or something similar.)
+
+# Introduction
 
 FFmpegPipe lets you read/write video files (mp4, wmv, avi, mov...) from Julia by piping images from/to an [FFmpeg](https://ffmpeg.org/) process.
 
