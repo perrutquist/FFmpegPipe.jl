@@ -5,7 +5,6 @@ using Plots
 f1 = tempname()*".mp4"
 
 s = openvideo(f1, "w", r=24)
-pyplot()
 for a in range(0, stop=pi, length=24)
     x = a .+ range(0, stop=pi, length=100)
     plt = plot(x, sin.(x))
