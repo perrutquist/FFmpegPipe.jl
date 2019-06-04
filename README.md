@@ -1,16 +1,14 @@
 # FFmpegPipe.jl - Save videos from Julia
 
-# MOVED
+This package is maintained at https://github.com/yakir12/FFmpegPipe.jl
 
-In the future, this package will be maintained at https://github.com/yakir12/FFmpegPipe.jl
-
-If your upstream repository is perrutquist/FFmpegPipe.jl then you should do `git remote set-url origin git@github.com:yakir12/FFmpegPipe.jl.git` (or something similar.)
+Note: [VideoIO.jl](https://github.com/JuliaIO/VideoIO.jl) now supports video output, so there's no reason to use this package anymore. 
 
 # Introduction
 
 FFmpegPipe lets you read/write video files (mp4, wmv, avi, mov...) from Julia by piping images from/to an [FFmpeg](https://ffmpeg.org/) process.
 
-This is neither as efficient nor as versatile as calling lower-level routines from libav/ffmpeg directly, like [VideoIO.jl](https://github.com/kmsquire/VideoIO.jl) does, but that package does not yet support video output.
+This is neither as efficient nor as versatile as calling lower-level routines from libav/ffmpeg directly, like VideoIO.jl does, ~~but that package does not yet support video output.~~
 
 Anything that Julia can `show` as a `MIME("image/png")` can be sent as a video frame,
 in particular `Plot` objects from [Plots.jl](https://github.com/JuliaPlots/Plots.jl)
